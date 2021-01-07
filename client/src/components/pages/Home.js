@@ -15,14 +15,14 @@ const useStyles = makeStyles(theme => ({
 }));
 
 const Home = () => {
-  const [open, setOpen] = useState(false);
+  const [openForm, setOpenForm] = useState(false);
 
   const handleClickOpen = () => {
-    setOpen(true);
+    setOpenForm(true);
   };
 
   const handleClose = () => {
-    setOpen(false);
+    setOpenForm(false);
   };
 
   const classes = useStyles();
@@ -30,7 +30,7 @@ const Home = () => {
   return (
     <div>
       <div>
-        <ContactForm open={open} handleClose={handleClose} />
+        <ContactForm openForm={openForm} handleClose={handleClose} />
       </div>
       <div>{<Contacts handleClickOpen={handleClickOpen} />}</div>
       <div>
