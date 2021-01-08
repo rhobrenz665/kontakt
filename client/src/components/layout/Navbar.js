@@ -5,7 +5,7 @@ import ContactFilter from '../contacts/ContactFilter';
 import { Link as RouterLink } from 'react-router-dom';
 import Gravatar from 'react-gravatar';
 
-import { fade, makeStyles } from '@material-ui/core/styles';
+import { fade, makeStyles, useTheme } from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import IconButton from '@material-ui/core/IconButton';
@@ -19,6 +19,17 @@ import SearchIcon from '@material-ui/icons/Search';
 import AccountCircle from '@material-ui/icons/AccountCircle';
 import { Link } from '@material-ui/core';
 import Avatar from '@material-ui/core/Avatar';
+import Drawer from '@material-ui/core/Drawer';
+import List from '@material-ui/core/List';
+import Divider from '@material-ui/core/Divider';
+import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
+import ChevronRightIcon from '@material-ui/icons/ChevronRight';
+import ListItem from '@material-ui/core/ListItem';
+import ListItemIcon from '@material-ui/core/ListItemIcon';
+import ListItemText from '@material-ui/core/ListItemText';
+import InfoIcon from '@material-ui/icons/Info';
+
+const drawerWidth = 240;
 
 const useStyles = makeStyles(theme => ({
   grow: {
@@ -97,6 +108,14 @@ const useStyles = makeStyles(theme => ({
       display: 'none!important',
     },
   },
+  drawerPaper: {
+    width: drawerWidth,
+  },
+  wrapDrawerIcon: {
+    verticalAlign: 'middle',
+    display: 'inline-flex',
+    marginRight: '5px',
+  },
 }));
 
 const Navbar = () => {
@@ -120,6 +139,18 @@ const Navbar = () => {
 
   const [anchorEl, setAnchorEl] = useState(null);
   const isMenuOpen = Boolean(anchorEl);
+
+  const [drawerOpen, setDrawerOpen] = useState(false);
+
+  const theme = useTheme();
+
+  const handleDrawerOpen = () => {
+    setDrawerOpen(true);
+  };
+
+  const handleDrawerClose = () => {
+    setDrawerOpen(false);
+  };
 
   const handleProfileMenuOpen = event => {
     setAnchorEl(event.currentTarget);
@@ -174,6 +205,7 @@ const Navbar = () => {
             className={classes.menuButton}
             color="inherit"
             aria-label="open drawer"
+            onClick={handleDrawerOpen}
           >
             <MenuIcon />
           </IconButton>
@@ -218,12 +250,53 @@ const Navbar = () => {
               )}
             </IconButton>
           </div>
-          <Button component={RouterLink} className={classes.about} to="/about">
+          {/* <Button component={RouterLink} className={classes.about} to="/about">
             About
-          </Button>
+          </Button> */}
         </Toolbar>
       </AppBar>
       {renderMenu}
+      <Drawer
+        className={classes.drawer}
+        variant="persistent"
+        anchor="left"
+        open={drawerOpen}
+        classes={{
+          paper: classes.drawerPaper,
+        }}
+      >
+        <div className={classes.drawerHeader}>
+          <IconButton onClick={handleDrawerClose}>
+            {theme.direction === 'ltr' ? (
+              <ChevronLeftIcon />
+            ) : (
+              <ChevronRightIcon />
+            )}
+          </IconButton>
+        </div>
+        <Divider />
+        <List>
+          {['Contacts', 'About'].map((text, index) => (
+            <ListItem button key={text}>
+              <ListItemIcon>
+                {index % 2 === 0 ? (
+                  <Button component={RouterLink} to="/">
+                    <PermContactCalendarIcon
+                      className={classes.wrapDrawerIcon}
+                    />{' '}
+                    <ListItemText secondary={text} />
+                  </Button>
+                ) : (
+                  <Button component={RouterLink} to="/about">
+                    <InfoIcon className={classes.wrapDrawerIcon} />{' '}
+                    <ListItemText secondary={text} />
+                  </Button>
+                )}
+              </ListItemIcon>
+            </ListItem>
+          ))}
+        </List>
+      </Drawer>
     </div>
   );
 };
