@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import Contacts from '../contacts/Contacts';
 import ContactForm from '../contacts/ContactForm';
+import ContactContext from '../../context/contact/contactContext';
 
 import { makeStyles } from '@material-ui/core/styles';
 import Fab from '@material-ui/core/Fab';
@@ -15,6 +16,8 @@ const useStyles = makeStyles(theme => ({
 }));
 
 const Home = () => {
+  const contactContext = useContext(ContactContext);
+  const { clearCurrent } = contactContext;
   const [openForm, setOpenForm] = useState(false);
 
   const handleClickOpen = () => {
@@ -23,6 +26,7 @@ const Home = () => {
 
   const handleClose = () => {
     setOpenForm(false);
+    clearCurrent();
   };
 
   const classes = useStyles();
@@ -30,7 +34,7 @@ const Home = () => {
   return (
     <div>
       <div>
-        <ContactForm openForm={openForm} handleClose={handleClose} />
+        <ContactForm open={openForm} handleClose={handleClose} />
       </div>
       <div>{<Contacts handleClickOpen={handleClickOpen} />}</div>
       <div>
